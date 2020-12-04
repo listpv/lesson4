@@ -69,31 +69,41 @@ public class MyLinkedList<T> implements Iterable<T>  {
 
         @Override
         public void remove() {
-//            if(direction){
-//                if(current.getNext().getPrev() == null){
-//                    return;
-//                }
-
-            System.out.println(current.getValue() + " " + current.getPrev().getValue() + " " + current.getNext().getValue());
-                current.getPrev().getPrev().setNext(current.getNext());
-                current.getNext().setPrev(current.getPrev().getPrev());
-            System.out.println(current.getValue() + " " + current.getPrev().getValue() + " " + current.getNext().getValue());
-
-//                first = current.getNext().getNext();
-//                if (isEmpty()) {
-//                    last = null;
-//                } else {
-//                    first.setPrev(null);                       //  не уверен в необходимости, ибо удалится.
-//                }
+            if (isEmpty()) {
+                return;
+            }
+            if(direction) {
+                if (first.getValue().equals(current.getValue())) {
+                    removeFirst();
+                    return;
+                }
+                if (current.getNext() == last) {
+                    removeLast();
+                    return;
+                }
+                current.getPrev().setNext(current.getNext());
+                current.getNext().setPrev(current.getPrev());
                 size--;
-
-//            }
-
-
+            }else {
+                if (last.getValue().equals(current.getValue())) {
+                    removeLast();
+                    return;
+                }
+                if (current.getNext() == first) {
+                    removeFirst();
+                    return;
+                }
+                current.getPrev().setNext(current.getNext());
+                current.getNext().setPrev(current.getPrev());
+                size--;
+            }
         }
 
         @Override
         public void set(T t) {
+            if(current.getPrev() != null){
+                current.getPrev().setValue(t);
+            }
 
         }
 
@@ -125,40 +135,40 @@ public class MyLinkedList<T> implements Iterable<T>  {
 
         @Override
         public void remove() {
-            first = current.getNext().getNext();
-            if (isEmpty()) {
-                last = null;
-            } else {
-                first.setPrev(null);                       //  не уверен в необходимости, ибо удалится.
-            }
-            size--;
-
+//            first = current.getNext().getNext();
 //            if (isEmpty()) {
-//                return ;
+//                last = null;
+//            } else {
+//                first.setPrev(null);                       //  не уверен в необходимости, ибо удалится.
 //            }
-//            if (first.getValue().equals(current.getNext().getValue())) {
-//                first = current.getNext().getNext();
-//                if (isEmpty()) {
-//                   last = null;
-//                } else {
-//                   first.setPrev(null);
-//               }
-//               size--;
-//                return;
-//            }
-//            if (current.getNext() == last) {
-//                if (last.getPrev() != null) {
-//                    last.getPrev().setNext(null);
-//                } else {
-//                    first = null;
-//                }
-//                last = last.getPrev();
-//                size--;
-//                return ;
-//            }
-//            current.getPrev().setNext(current.getNext().getNext());
-//            current.getNext().getNext().setPrev(current.getPrev());
 //            size--;
+
+            if (isEmpty()) {
+                return ;
+            }
+            if (first.getValue().equals(current.getNext().getValue())) {
+                first = current.getNext().getNext();
+                if (isEmpty()) {
+                   last = null;
+                } else {
+                   first.setPrev(null);
+               }
+               size--;
+                return;
+            }
+            if (current.getNext() == last) {
+                if (last.getPrev() != null) {
+                    last.getPrev().setNext(null);
+                } else {
+                    first = null;
+                }
+                last = last.getPrev();
+                size--;
+                return ;
+            }
+            current.getPrev().setNext(current.getNext().getNext());
+            current.getNext().getNext().setPrev(current.getPrev());
+            size--;
         }
     }
 
