@@ -74,23 +74,51 @@ public class MyLinkedList<T> implements Iterable<T>  {
             }
             if(direction) {
                 if (first.getValue().equals(current.getValue())) {
-                    removeFirst();
+                    first = first.getNext();
+                    if (isEmpty()) {
+                        last = null;
+                    } else {
+                        first.setPrev(null);
+                    }
+                    size--;
                     return;
                 }
-                if (current.getNext() == last) {
-                    removeLast();
+                if (current == last)
+                {
+                    if (last.getPrev() != null) {
+                        last.getPrev().setNext(null);
+                    } else {
+                        first = null;
+                    }
+                    last = last.getPrev();
+                    size--;
                     return;
                 }
                 current.getPrev().setNext(current.getNext());
                 current.getNext().setPrev(current.getPrev());
+
                 size--;
             }else {
                 if (last.getValue().equals(current.getValue())) {
-                    removeLast();
+//                    removeLast();
+                    if (last.getPrev() != null) {
+                        last.getPrev().setNext(null);
+                    } else {
+                        first = null;
+                    }
+                    last = last.getPrev();
+                    size--;
                     return;
                 }
-                if (current.getNext() == first) {
-                    removeFirst();
+                if (current == first) {
+//                    removeFirst();
+                    first = first.getNext();
+                    if (isEmpty()) {
+                        last = null;
+                    } else {
+                        first.setPrev(null);
+                    }
+                    size--;
                     return;
                 }
                 current.getPrev().setNext(current.getNext());
@@ -101,14 +129,52 @@ public class MyLinkedList<T> implements Iterable<T>  {
 
         @Override
         public void set(T t) {
-            if(current.getPrev() != null){
-                current.getPrev().setValue(t);
-            }
+
+                current.setValue(t);
 
         }
 
         @Override
         public void add(T t) {
+            Node newmode = new Node(t);
+//            System.out.println(current.getValue());
+            if(direction) {
+                if (current == first) {
+                    newmode.setPrev(null);
+                    newmode.setNext(current);
+                    first = newmode;
+                    current.setPrev(newmode);
+                    current = newmode;
+                } else {
+                    newmode.setPrev(current.getPrev());
+                    newmode.setNext(current);
+                    current.getPrev().setNext(newmode);
+                    current.setPrev(newmode);
+                    current = newmode;
+//                current.setPrev(newmode.getPrev());
+//                current.setNext(newmode.getNext());
+                }
+
+            }else {
+                if (current == last) {
+                    newmode.setNext(null);
+                    newmode.setPrev(current);
+                    last = newmode;
+                    current.setNext(newmode);
+                    current = newmode;
+                } else {
+                    newmode.setNext(current.getNext());
+                    newmode.setPrev(current);
+                    current.getNext().setPrev(newmode);
+                    current.setNext(newmode);
+                    current = newmode;
+//                current.setPrev(newmode.getPrev());
+//                current.setNext(newmode.getNext());
+                }
+
+
+            }
+
 
         }
     }
@@ -127,21 +193,9 @@ public class MyLinkedList<T> implements Iterable<T>  {
             return current.getValue();
         }
 
-//        @Override
-//        public void remove() {
-//            MyLinkedList.this.remove(next());
-//        }
-
 
         @Override
         public void remove() {
-//            first = current.getNext().getNext();
-//            if (isEmpty()) {
-//                last = null;
-//            } else {
-//                first.setPrev(null);                       //  не уверен в необходимости, ибо удалится.
-//            }
-//            size--;
 
             if (isEmpty()) {
                 return ;
@@ -156,13 +210,13 @@ public class MyLinkedList<T> implements Iterable<T>  {
                size--;
                 return;
             }
-            if (current.getNext() == last) {
+            if (current == last) {
                 if (last.getPrev() != null) {
                     last.getPrev().setNext(null);
                 } else {
                     first = null;
                 }
-                last = last.getPrev();
+                last = null;
                 size--;
                 return ;
             }
@@ -380,11 +434,11 @@ public class MyLinkedList<T> implements Iterable<T>  {
 
     @Override
     public String toString() {
-        Node current = first;
+        Node currentString = first;
         StringBuilder sb = new StringBuilder();
-        while (current != null) {
-            sb.append(current.getValue() + ", ");
-            current = current.getNext();
+        while (currentString != null) {
+            sb.append(currentString.getValue() + ", ");
+            currentString = currentString.getNext();
         }
         if (!isEmpty()) {
             sb.setLength(sb.length() - 2);
